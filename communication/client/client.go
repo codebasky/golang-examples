@@ -14,6 +14,7 @@ func Client(addr string) {
 		fmt.Printf("Client dialup error %s \n", err)
 		return
 	}
+	defer c.Close()
 	for {
 		reader := bufio.NewReader(os.Stdin)
 		fmt.Print(">> ")
