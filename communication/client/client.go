@@ -15,16 +15,17 @@ func Client(addr string) {
 		return
 	}
 	defer c.Close()
+	ureader := bufio.NewReader(os.Stdin)
+	sreader := bufio.NewReader(c)
 	for {
-		reader := bufio.NewReader(os.Stdin)
 		fmt.Print(">> ")
-		data, err := reader.ReadString('\n')
+		data, err := ureader.ReadString('\n')
 		if err != nil {
 			fmt.Println("Reading user input error")
 			return
 		}
 		fmt.Fprint(c, data)
-		message, _ := bufio.NewReader(c).ReadString('\n')
+		message, _ := sreader.ReadString('\n')
 		fmt.Print("->: " + message)
 		if strings.TrimSpace(string(data)) == "STOP" {
 			fmt.Println("TCP client exiting...")
