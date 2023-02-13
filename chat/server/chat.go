@@ -40,6 +40,7 @@ func AddClient(conn net.Conn, msgCh chan string, quit chan bool) (chan string, c
 		case <-quit:
 			c.cn.Close()
 		case <-c.done:
+			fmt.Println("client closing")
 		}
 	}()
 
