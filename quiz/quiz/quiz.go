@@ -1,7 +1,6 @@
 package quiz
 
 import (
-	"bufio"
 	"encoding/csv"
 	"fmt"
 	"io"
@@ -10,19 +9,19 @@ import (
 )
 
 func Quiz(fname string, wait time.Duration) error {
-	r, err := os.OpenFile(fname, os.O_RDONLY, 0755)
+	file, err := os.OpenFile(fname, os.O_RDONLY, 0755)
 	if err != nil {
 		return err
 	}
-	reader := csv.NewReader(r)
+	reader := csv.NewReader(file)
 	correct := 0
 	total := 0
-	ir := bufio.NewScanner(os.Stdin)
 	ansC := make(chan string)
-	wait = wait + (1 * time.Second)
+
 	tc := time.NewTicker(wait)
 	defer tc.Stop()
 	defer close(ansC)
+
 	for {
 		q, err := reader.Read()
 		if err == io.EOF {
@@ -37,11 +36,11 @@ func Quiz(fname string, wait time.Duration) error {
 		fmt.Printf("Q: %s? \n", q[0])
 		fmt.Print("Ans:")
 
-		go func(ir *bufio.Scanner, ch chan string) {
-			if ir.Scan() {
-				ch <- ir.Text()
-			}
-		}(ir, ansC)
+		go func() {
+			var uans string
+			fmt.Scanf("%s\n", &uans)
+			ansC <- uans
+		}()
 
 		select {
 		case ans := <-ansC:
