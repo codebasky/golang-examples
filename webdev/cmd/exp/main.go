@@ -1,22 +1,48 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
-	"os"
+	"net/http"
 )
 
+var testTemplate *template.Template
+
+type ViewData struct {
+	User User
+}
+
+type User struct {
+	ID    int
+	Email string
+}
+
+func (u User) HasPermission(feature string) bool {
+	if feature == "feature-a" {
+		return true
+	} else {
+		return false
+	}
+}
+
 func main() {
-	t, err := template.ParseFiles("hello.gohtml")
+	var err error
+	testTemplate, err = template.ParseFiles("hello.gohtml")
 	if err != nil {
 		panic(err)
 	}
-	user := struct {
-		Name string
-	}{
-		Name: "Basky come on man",
-	}
 
-	fmt.Println("template exp")
-	t.Execute(os.Stdout, user)
+	http.HandleFunc("/", handler)
+	http.ListenAndServe(":3000", nil)
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+
+	vd := ViewData{
+		User: User{1, "jon@calhoun.io"},
+	}
+	err := testTemplate.Execute(w, vd)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
