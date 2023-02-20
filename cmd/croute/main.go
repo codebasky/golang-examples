@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"webdev/handler"
+
+	"github.com/codebasky/golang-examples/webdev/handler"
 )
 
 func main() {
