@@ -1,10 +1,11 @@
 package main
 
 import (
-	"chat/client"
-	"chat/server"
 	"fmt"
 	"os"
+
+	"github.com/codebasky/golang-examples/chat/client"
+	"github.com/codebasky/golang-examples/chat/server"
 )
 
 func main() {

@@ -3,12 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"quiz/quiz"
 	"time"
+
+	"github.com/codebasky/golang-examples/quiz/quiz"
 )
 
 var (
-	DefaultQuizFile = "C:\\Users\\BaskarHome\\Coding\\golang\\golang-examples\\quiz\\cmd\\problem.csv"
+	DefaultQuizFile = "problem.csv"
 )
 
 func main() {

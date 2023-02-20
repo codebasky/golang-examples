@@ -1,12 +1,14 @@
 package main
 
 import (
-	"cyoa/cyoa"
 	"fmt"
+
+	"github.com/codebasky/golang-examples/cyoa/cyoa"
 )
 
 func main() {
 	adv, err := cyoa.ParseJson("cyoa.json")
+
 	if err != nil {
 		fmt.Println(err)
 		return
