@@ -7,6 +7,8 @@ import (
 )
 
 func main() {
+	fmt.Println("Simple Square Pipeline Example")
+
 	input := []int{1, 2, 3, 4, 5, 6, 7}
 	done := make(chan struct{})
 	defer close(done)
