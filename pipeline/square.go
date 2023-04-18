@@ -2,36 +2,48 @@ package pipeline
 
 import "sync"
 
-func Generator(num ...int) <-chan int {
+func Generator(done <-chan struct{}, num ...int) <-chan int {
 	out := make(chan int)
 	go func() {
 		defer close(out)
 		for _, item := range num {
-			out <- item
+			select {
+			case out <- item:
+			case <-done:
+				return
+			}
 		}
 	}()
 	return out
 }
 
-func Processor(in <-chan int) <-chan int {
+func Processor(done <-chan struct{}, in <-chan int) <-chan int {
 	out := make(chan int)
 	go func() {
 		defer close(out)
 		for item := range in {
-			out <- item * item
+			select {
+			case out <- item * item:
+			case <-done:
+				return
+			}
 		}
 	}()
 	return out
 }
 
-func Merger(chs ...<-chan int) <-chan int {
+func Merger(done <-chan struct{}, chs ...<-chan int) <-chan int {
 	out := make(chan int)
 	var wg sync.WaitGroup
 
 	extract := func(c <-chan int) {
 		defer wg.Done()
 		for item := range c {
-			out <- item
+			select {
+			case out <- item:
+			case <-done:
+				return
+			}
 		}
 
 	}
