@@ -1,7 +1,6 @@
 package main
 
 import (
-	"crypto/md5"
 	"fmt"
 	"os"
 	"sort"
@@ -11,20 +10,14 @@ import (
 
 func main() {
 	fmt.Println("Digester Pipeline Example")
+	done := make(chan struct{})
+	defer close(done)
 	if len(os.Args) != 2 {
 		fmt.Println("Need path as input parameter")
 		return
 	}
 	path := os.Args[1]
-	results, ech := pipeline.MD5ALL(path)
-	digest := make(map[string][md5.Size]byte)
-	for result := range results {
-		if result.Err != nil {
-			fmt.Printf("Error %s on processing file %s", result.Err, result.Path)
-			return
-		}
-		digest[result.Path] = result.Digest
-	}
+	digest, err := pipeline.MD5ALL(done, path)
 	fpath := []string{}
 	for path := range digest {
 		fpath = append(fpath, path)
@@ -33,7 +26,7 @@ func main() {
 	for _, path := range fpath {
 		fmt.Printf("Digest for file: %s is %x\n", path, digest[path])
 	}
-	err := <-ech
+
 	if err != nil {
 		fmt.Printf("Error processing walk %s", err)
 	}
