@@ -98,11 +98,15 @@ func buildSite(home string, level int, siteMap map[string]struct{}) error {
 	return nil
 }
 
-func (b builder) Build() (map[string]struct{}, error) {
+func (b builder) Build() ([]string, error) {
 	siteMap := make(map[string]struct{})
 	err := buildSite(b.home, b.depth, siteMap)
 	if err != nil {
 		return nil, err
 	}
-	return siteMap, nil
+	links := []string{}
+	for link := range siteMap {
+		links = append(links, link)
+	}
+	return links, nil
 }
