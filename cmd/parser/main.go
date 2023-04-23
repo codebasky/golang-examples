@@ -16,7 +16,11 @@ func main() {
 			return
 		}
 		defer f.Close()
-		output := linkparser.Parse(f)
+		output, err := linkparser.Parse(f)
+		if err != nil {
+			fmt.Printf("parse file failed: %s\n", err)
+			return
+		}
 		fmt.Printf("\noutput for file: %s\n", name)
 		for idx, link := range output {
 			fmt.Printf("%d. Href:%s \t Text: %s\n", idx, link.Href, link.Text)
