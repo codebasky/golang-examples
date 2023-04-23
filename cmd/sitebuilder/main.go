@@ -1,7 +1,19 @@
 package main
 
-import "github.com/codebasky/golang-examples/sitemap"
+import (
+	"fmt"
+
+	"github.com/codebasky/golang-examples/sitemap"
+)
 
 func main() {
-	sitemap.Build()
+	b := sitemap.New("https://www.calhoun.io", 4)
+	output, err := b.Build()
+	if err != nil {
+		fmt.Printf("site map building error : %s", err)
+		return
+	}
+	for link := range output {
+		fmt.Println(link)
+	}
 }
