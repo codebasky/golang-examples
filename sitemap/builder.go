@@ -82,6 +82,7 @@ func buildSite(home string, level int, siteMap map[string]struct{}) error {
 				siteMap[link] = struct{}{}
 				newLinks, err := parseLink(home, link)
 				if err != nil {
+					fmt.Printf("parset link failed for link: %s error: %s\n", link, err)
 					continue
 				}
 				vlinks := getHomeLinks(home, newLinks)
