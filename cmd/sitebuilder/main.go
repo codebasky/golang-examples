@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 
@@ -8,8 +9,12 @@ import (
 )
 
 func main() {
-	home := "https://www.calhoun.io"
-	b := sitemap.New(home, 2)
+	var domain string
+	var depth int
+	flag.StringVar(&domain, "domain", "https://www.calhoun.io", "website to map")
+	flag.IntVar(&depth, "depth", 3, "depth of link parsing")
+	flag.Parse()
+	b := sitemap.New(domain, depth)
 	links, err := b.Build()
 	if err != nil {
 		fmt.Printf("site map building error : %s", err)

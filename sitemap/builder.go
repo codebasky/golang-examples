@@ -53,6 +53,9 @@ func parseLink(home string, link string) ([]string, error) {
 	links := []string{}
 	for _, ref := range href {
 		link := ref.Href
+		if strings.Contains(link, "mailto") {
+			continue
+		}
 		if !strings.Contains(link, "http") {
 			link = home + link
 		}
